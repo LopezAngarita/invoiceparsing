@@ -24,7 +24,7 @@ def check_password() -> bool:
     if st.session_state.get("authenticated"):
         return True
 
-    st.title("AI Accountant - Smart Diff Checker")
+    st.title("AI Document Info Extractor")
     secret = st.text_input("Secret", type="password", key="secret_input")
     if st.button("Enter"):
         if secret == st.secrets.get("USER_PWD"):
