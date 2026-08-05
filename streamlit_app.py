@@ -8,6 +8,25 @@ from pypdf import PdfReader
 from src.model_openai import extract_information_for_documents
 from src.credit_cost_calc import get_credits_cost
 
+# Check password before entering the page
+def check_password() -> bool:
+    """Gate the app behind the shared secret in st.secrets['USER_PWD']."""
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.title("AI Accountant - Smart Diff Checker")
+    secret = st.text_input("Secret", type="password", key="secret_input")
+    if st.button("Enter"):
+        if secret == st.secrets.get("USER_PWD"):
+            st.session_state["authenticated"] = True
+            st.rerun()
+        else:
+            st.error("Wrong secret.")
+    return False
+
+if not check_password():
+    st.stop
+
 # -------------------------------------------------
 # Page config
 # -------------------------------------------------
