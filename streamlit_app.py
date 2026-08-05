@@ -1,14 +1,24 @@
-import streamlit as st
 import json
-import pandas as pd
 import io
-
+import pandas as pd
+import streamlit as st
 from pypdf import PdfReader
 
-from src.model_openai import extract_information_for_documents
-from src.credit_cost_calc import get_credits_cost
+from model_openai import extract_information_for_documents
+from credit_cost_calc import get_credits_cost
 
-# Check password before entering the page
+# -------------------------------------------------
+# Page config
+# -------------------------------------------------
+st.set_page_config(
+    page_title="AI Document Info Extractor",
+    page_icon="⚙️",
+    layout="wide",
+)
+
+# -------------------------------------------------
+# Authentication Gate
+# -------------------------------------------------
 def check_password() -> bool:
     """Gate the app behind the shared secret in st.secrets['USER_PWD']."""
     if st.session_state.get("authenticated"):
@@ -24,17 +34,9 @@ def check_password() -> bool:
             st.error("Wrong secret.")
     return False
 
+# Stop execution if user is not authenticated
 if not check_password():
-    st.stop
-
-# -------------------------------------------------
-# Page config
-# -------------------------------------------------
-st.set_page_config(
-    page_title="AI Document Info Extractor",
-    page_icon="⚙️",
-    layout="wide",
-)
+    st.stop()
 
 # -------------------------------------------------
 # Session state
@@ -115,7 +117,7 @@ if "selected_model" not in st.session_state:
 
 
 # -------------------------------------------------
-# LinkedIn-style CSS
+# Custom CSS
 # -------------------------------------------------
 st.markdown("""
 <style>
